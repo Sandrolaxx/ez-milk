@@ -1,0 +1,1 @@
+export const baseUrl = "http://192.168.3.75:8080/ez-milk/api/v1";
