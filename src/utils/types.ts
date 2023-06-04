@@ -15,6 +15,7 @@ export interface InputProps {
     value: any;
     password?: boolean;
     onFocus?: Function,
+    showSoftInputOnFocus?: boolean;
 }
 
 export interface ISvgProps {

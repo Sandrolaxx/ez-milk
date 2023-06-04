@@ -4,7 +4,7 @@ import { Calendar, DateData } from "react-native-calendars";
 import Button from "../../components/Button";
 import GoBackBtn from "../../components/GoBackBtn";
 import Input from "../../components/Input";
-import { CalendarView, Container, InputContainer, RegisterBtnContainer, SubTitle, Title } from "./styles";
+import { CalendarView, Container, RegisterBtnContainer, SubTitle, Title } from "./styles";
 
 export default function CreateRecord(navParam: any) {
     const navigation = useNavigation();
@@ -31,7 +31,10 @@ export default function CreateRecord(navParam: any) {
                 </SubTitle>
                 <Input label="Quantidade Total Litros" value={productQuantity} handleChangeText={(val: any) => setProductQuantity(val)} />
                 <Input label="Valor Total" value={amount} handleChangeText={(val: any) => setAmount(val)} />
-                <Input onFocus={() => setShowCalendar(true)} label="03/06/2023" value={date} handleChangeText={(val: any) => setDate(val)} />
+                <Input showSoftInputOnFocus
+                    onFocus={() => setShowCalendar(true)}
+                    label="03/06/2023" value={date}
+                    handleChangeText={(val: any) => setDate(val)} />
                 <RegisterBtnContainer>
                     <Button handleFunction={() => navigation.goBack()}>
                         Registrar

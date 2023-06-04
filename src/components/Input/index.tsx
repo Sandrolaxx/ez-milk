@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { InputProps } from "../../utils/types";
 import { Container, InputText } from "./styles";
 
-export default function Input({ value, password, label, handleChangeText, onFocus }: InputProps) {
+export default function Input({ value, password, label, handleChangeText, onFocus, showSoftInputOnFocus }: InputProps) {
     const [isFocused, setFocused] = useState(false);
 
     function handleFocusOff() {
@@ -15,7 +15,7 @@ export default function Input({ value, password, label, handleChangeText, onFocu
         <Container>
             <InputText
                 secureTextEntry={password}
-                showSoftInputOnFocus={false}
+                showSoftInputOnFocus={!showSoftInputOnFocus}
                 onFocus={() => onFocus ? handleFocusOff() : setFocused(true)}
                 onEndEditing={() => setFocused(false)}
                 focused={isFocused}
