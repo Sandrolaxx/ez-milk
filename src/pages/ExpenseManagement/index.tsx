@@ -32,7 +32,9 @@ export default function ExpenseManagement() {
                 }
             })
                 .then(res => {
-                    res.json().then(res => setExpensesData(res));
+                    res.json().then(res => {
+                        setExpensesData(res)
+                    });
                 })
                 .catch(err => console.error(err));
 
@@ -93,43 +95,43 @@ export default function ExpenseManagement() {
                     <Container>
                         <Subtitle>Selecione o tipo de lançamento</Subtitle>
                         <CardBtnBlock>
-                            <ExpenseCardBtn onPress={() => navigation.navigate("CreateRecord", { isExpense: true, expense: expensesData[5] })}>
-                                {getStatusComponent(expensesData[5].statusRegistro)}
-                                <ExpenseImage source={CornImg} />
-                                <ExpenseText>
-                                    {expensesData[5].descricao}
-                                </ExpenseText>
-                            </ExpenseCardBtn>
-                            <ExpenseCardBtn onPress={() => navigation.navigate("CreateRecord", { isExpense: true, expense: expensesData[1] })}>
-                                {getStatusComponent(expensesData[1].statusRegistro)}
-                                <ExpenseImage source={GrassImg} />
-                                <ExpenseText>
-                                    {expensesData[1].descricao}
-                                </ExpenseText>
-                            </ExpenseCardBtn>
-                        </CardBtnBlock>
-                        <CardBtnBlock>
                             <ExpenseCardBtn onPress={() => navigation.navigate("CreateRecord", { isExpense: true, expense: expensesData[4] })}>
                                 {getStatusComponent(expensesData[4].statusRegistro)}
-                                <ExpenseImage source={MineralImg} />
+                                <ExpenseImage source={CornImg} />
                                 <ExpenseText>
                                     {expensesData[4].descricao}
                                 </ExpenseText>
                             </ExpenseCardBtn>
-                            <ExpenseCardBtn onPress={() => navigation.navigate("CreateRecord", { isExpense: true, expense: expensesData[2] })}>
-                                {getStatusComponent(expensesData[2].statusRegistro)}
-                                <ExpenseImage source={HealthImg} />
+                            <ExpenseCardBtn onPress={() => navigation.navigate("CreateRecord", { isExpense: true, expense: expensesData[0] })}>
+                                {getStatusComponent(expensesData[0].statusRegistro)}
+                                <ExpenseImage source={GrassImg} />
                                 <ExpenseText>
-                                    {expensesData[2].descricao}
+                                    {expensesData[0].descricao}
                                 </ExpenseText>
                             </ExpenseCardBtn>
                         </CardBtnBlock>
                         <CardBtnBlock>
                             <ExpenseCardBtn onPress={() => navigation.navigate("CreateRecord", { isExpense: true, expense: expensesData[3] })}>
                                 {getStatusComponent(expensesData[3].statusRegistro)}
-                                <ExpenseImage source={LaboresImg} />
+                                <ExpenseImage source={MineralImg} />
                                 <ExpenseText>
                                     {expensesData[3].descricao}
+                                </ExpenseText>
+                            </ExpenseCardBtn>
+                            <ExpenseCardBtn onPress={() => navigation.navigate("CreateRecord", { isExpense: true, expense: expensesData[1] })}>
+                                {getStatusComponent(expensesData[1].statusRegistro)}
+                                <ExpenseImage source={HealthImg} />
+                                <ExpenseText>
+                                    {expensesData[1].descricao}
+                                </ExpenseText>
+                            </ExpenseCardBtn>
+                        </CardBtnBlock>
+                        <CardBtnBlock>
+                            <ExpenseCardBtn onPress={() => navigation.navigate("CreateRecord", { isExpense: true, expense: expensesData[2] })}>
+                                {getStatusComponent(expensesData[2].statusRegistro)}
+                                <ExpenseImage source={LaboresImg} />
+                                <ExpenseText>
+                                    {expensesData[2].descricao}
                                 </ExpenseText>
                             </ExpenseCardBtn>
                         </CardBtnBlock>

@@ -1,17 +1,69 @@
 import { useNavigation } from "@react-navigation/native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MinusIcon from "../../assets/icons/minus.png";
 import PlusIcon from "../../assets/icons/plus.png";
 import Button from "../../components/Button";
 import GoBackBtn from "../../components/GoBackBtn";
-import { BtnContainer, BtnImageIcon, Container, HeaderText, HeardQuantityText, InputText, InputsContainer, MinusBtn, PlusBtn, SubTitle, SumInput, Title } from "./styles";
+import { baseUrl } from "../../utils/configs";
+import { RebanhoType } from "../../utils/types";
+import { BtnImageIcon, Container, HeaderText, HeardQuantityText, InputText, InputsContainer, MinusBtn, PlusBtn, SubTitle, SumInput, Title } from "./styles";
 
 export default function HerdChange() {
     const navigation = useNavigation();
-    const [qtdLactante, setQtdLactante] = useState(80);
-    const [qtdSeca, setQtdSeca] = useState(4);
-    const [qtdNovilha, setQtdNovilha] = useState(2);
-    const [qtdBezerra, setQtdBezerra] = useState(2);
+    const [qtdTotal, setQtdTotal] = useState(0);
+    const [qtdLactante, setQtdLactante] = useState(0);
+    const [qtdSeca, setQtdSeca] = useState(0);
+    const [qtdNovilha, setQtdNovilha] = useState(0);
+    const [qtdBezerra, setQtdBezerra] = useState(0);
+
+    useEffect(() => {
+        getRebanhoData();
+    }, []);
+
+    function getRebanhoData() {
+        fetch(baseUrl.concat("/rebanho/1"), {
+            headers: {
+                "Content-type": "application/json"
+            }
+        })
+            .then(res => {
+                res.json().then((res: RebanhoType) => {
+                    setQtdTotal(res.quantidadeTotal);
+                    setQtdLactante(res.lactacao);
+                    setQtdSeca(res.seca);
+                    setQtdBezerra(res.bezerra);
+                    setQtdNovilha(res.novilha);
+                });
+            })
+            .catch(err => console.error(err));
+    }
+
+    function updateRebanhoData() {
+        const payload = {
+            bezerra: qtdBezerra,
+            lactacao: qtdLactante,
+            novilha: qtdNovilha,
+            seca: qtdSeca
+        }
+
+        fetch(baseUrl.concat("/rebanho/1/atualizar/1"), {
+            method: "PUT",
+            headers: {
+                "Content-type": "application/json"
+            },
+            body: JSON.stringify(payload)
+        })
+            .then(res => {
+                res.json().then((res: RebanhoType) => {
+                    setQtdTotal(res.quantidadeTotal);
+                    setQtdLactante(res.lactacao);
+                    setQtdSeca(res.seca);
+                    setQtdBezerra(res.bezerra);
+                    setQtdNovilha(res.novilha);
+                });
+            })
+            .catch(err => console.error(err));
+    }
 
     return (
         <Container>
@@ -20,7 +72,7 @@ export default function HerdChange() {
                 <Title>Rebanho</Title>
                 <SubTitle>Alteração</SubTitle>
                 <HeardQuantityText>
-                    Quantidade atual rebanho: 88
+                    Quantidade atual rebanho: {qtdTotal}
                 </HeardQuantityText>
                 <HeaderText>
                     Lactante
@@ -71,7 +123,7 @@ export default function HerdChange() {
                     </MinusBtn>
                 </SumInput>
             </InputsContainer>
-            <Button handleFunction={() => navigation.goBack()}>
+            <Button handleFunction={updateRebanhoData}>
                 Atualizar
             </Button>
         </Container>

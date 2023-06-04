@@ -37,8 +37,8 @@ export type ExpenseChildData = {
 };
 
 export type HistoryData = {
-    registros: Array<CreateExpenseData>;
-    saldoFinal: number;
+  registros: Array<CreateExpenseData>;
+  saldoFinal: number;
 };
 
 export type CreateExpenseData = {
@@ -56,4 +56,12 @@ export type CreateExpenseData = {
     descricao: string;
   };
   porcentagem?: number;
+};
+
+export type RebanhoType = {
+  quantidadeTotal: number;
+  lactacao: number;
+  seca: number;
+  novilha: number;
+  bezerra: number;
 };
