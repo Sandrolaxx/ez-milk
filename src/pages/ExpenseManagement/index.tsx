@@ -10,29 +10,50 @@ import HealthImg from "../../assets/icons/heartbeat.png";
 import LaboresImg from "../../assets/icons/laborers.png";
 import MineralImg from "../../assets/icons/salt.png";
 import GoBackBtn from "../../components/GoBackBtn";
-import { baseUrl } from "../../utils/confis";
-import { ExpenseData } from "../../utils/types";
-import { getMonths } from "../../utils/utils";
+import { baseUrl } from "../../utils/configs";
+import { ExpenseData, HistoryData } from "../../utils/types";
+import { formatMoneyWithSign, getIntMonth, getMonths } from "../../utils/utils";
 import { CardBtnBlock, Container, ContainerBtn, DropDownIcon, ExpenseCardBtn, ExpenseImage, ExpenseStatus, ExpenseText, MovimentBlock, MovimentDiscription, MovimentValue, Movimentations, SelectViewContainer, SelectedView, SelectedViewText, Separator, Subtitle } from "./styles";
 
 export default function ExpenseManagement() {
     const navigation = useNavigation();
     const months = getMonths();
     const [isExpensesView, setExpensesView] = useState(true);
+    const [selectedMonth, setSelectedMonth] = useState(6);
     const [expensesData, setExpensesData] = useState<Array<ExpenseData>>();
+    const [historyData, setHistoryData] = useState<HistoryData>();
     const isFocused = useIsFocused();
 
     useEffect(() => {
-        fetch(baseUrl.concat("/tipo-registro/?pessoaId=1"), {
+        if (isExpensesView) {
+            fetch(baseUrl.concat("/tipo-registro/?pessoaId=1"), {
+                headers: {
+                    "Content-type": "application/json"
+                }
+            })
+                .then(res => {
+                    res.json().then(res => setExpensesData(res));
+                })
+                .catch(err => console.error(err));
+
+        } else {
+            handleGetHistory();
+        }
+    }, [isFocused, isExpensesView, selectedMonth]);
+
+    function handleGetHistory() {
+        fetch(baseUrl.concat("/registro/1/historico?mes=".concat(selectedMonth.toString())), {
             headers: {
                 "Content-type": "application/json"
             }
         })
             .then(res => {
-                res.json().then(res => setExpensesData(res));
+                res.json().then(res => {
+                    setHistoryData(res);
+                });
             })
             .catch(err => console.error(err));
-    }, [isFocused]);
+    }
 
     function getStatusComponent(strStatus: string) {
         switch (strStatus) {
@@ -114,51 +135,46 @@ export default function ExpenseManagement() {
                         </CardBtnBlock>
                     </Container>
                     :
-                    <Container>
-                        <SelectDropdown
-                            data={months}
-                            defaultValueByIndex={months.length - 1}
-                            renderDropdownIcon={() => <DropDownIcon source={ChevronDown} />}
-                            buttonStyle={{ width: "100%", borderRadius: 6, borderColor: "#b9b9c5", borderWidth: 1, marginTop: 18 }}
-                            onSelect={(selectedItem, index) => {
-                                console.log(selectedItem, index)
-                            }}
-                        />
-                        <Movimentations>
-                            <MovimentBlock>
-                                <MovimentDiscription>
-                                    Receitas
-                                </MovimentDiscription>
-                                <MovimentValue cashIn>
-                                    R$ 49.784,28
-                                </MovimentValue>
-                            </MovimentBlock>
-                            <MovimentBlock>
-                                <MovimentDiscription>
-                                    Mão de Obra(Veterinário) - 35%
-                                </MovimentDiscription>
-                                <MovimentValue>
-                                    R$ 13.398,28
-                                </MovimentValue>
-                            </MovimentBlock>
-                            <MovimentBlock>
-                                <MovimentDiscription>
-                                    Concentrado(Milho) - 44.5%
-                                </MovimentDiscription>
-                                <MovimentValue>
-                                    R$ 19.042,32
-                                </MovimentValue>
-                            </MovimentBlock>
-                        </Movimentations>
-                        <MovimentBlock lastMov>
-                            <MovimentDiscription>
-                                Saldo Final:
-                            </MovimentDiscription>
-                            <MovimentValue cashIn>
-                                R$ 17.343,68
-                            </MovimentValue>
-                        </MovimentBlock>
-                    </Container>
+                    !historyData ?
+                        <Subtitle>Carregando...</Subtitle>
+                        :
+                        <Container>
+                            <SelectDropdown
+                                data={months}
+                                defaultValueByIndex={months.length - 1}
+                                renderDropdownIcon={() => <DropDownIcon source={ChevronDown} />}
+                                buttonStyle={{ width: "100%", borderRadius: 6, borderColor: "#b9b9c5", borderWidth: 1, marginTop: 18 }}
+                                onSelect={(selectedItem, index) => setSelectedMonth(getIntMonth(selectedItem))}
+                            />
+                            {historyData && historyData.registros.length > 0 ?
+                                <>
+                                    <Movimentations>
+                                        {historyData.registros.map((history, index) => (
+                                            <MovimentBlock key={index}>
+                                                <MovimentDiscription>
+                                                    {history.tipoRegistro?.descricao}
+                                                    {history.tipoRegistroFilho?.descricao && "(".concat(history.tipoRegistroFilho?.descricao).concat(")")}
+                                                    {history.porcentagem && " - ".concat(history.porcentagem.toString().concat("%"))}
+                                                </MovimentDiscription>
+                                                <MovimentValue cashIn={history.entrada}>
+                                                    {formatMoneyWithSign(history.preco)}
+                                                </MovimentValue>
+                                            </MovimentBlock>
+                                        ))}
+                                    </Movimentations>
+                                    <MovimentBlock lastMov>
+                                        <MovimentDiscription>
+                                            Saldo Final:
+                                        </MovimentDiscription>
+                                        <MovimentValue cashIn>
+                                            {formatMoneyWithSign(historyData.saldoFinal)}
+                                        </MovimentValue>
+                                    </MovimentBlock>
+                                </>
+                                :
+                                <Subtitle>Nenhum registro encontrado</Subtitle>
+                            }
+                        </Container>
             }
         </>
     )

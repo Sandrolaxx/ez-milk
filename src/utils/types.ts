@@ -36,15 +36,24 @@ export type ExpenseChildData = {
   descricao: string;
 };
 
+export type HistoryData = {
+    registros: Array<CreateExpenseData>;
+    saldoFinal: number;
+};
+
 export type CreateExpenseData = {
   entrada: boolean;
   dataRegistro: string;
   quantidade: string;
-  preco: string;
+  preco: number;
   tipoRegistro?: {
     id: number;
+    descricao: string;
+    entrada: false;
   };
   tipoRegistroFilho?: {
     id: number;
+    descricao: string;
   };
+  porcentagem?: number;
 };

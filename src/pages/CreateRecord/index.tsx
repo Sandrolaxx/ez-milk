@@ -6,7 +6,7 @@ import ChevronDown from "../../assets/icons/chevron-down.png";
 import Button from "../../components/Button";
 import GoBackBtn from "../../components/GoBackBtn";
 import Input from "../../components/Input";
-import { baseUrl } from "../../utils/confis";
+import { baseUrl } from "../../utils/configs";
 import { CreateExpenseData, ExpenseChildData } from "../../utils/types";
 import { DropDownIcon } from "../ExpenseManagement/styles";
 import { CalendarView, Container, RegisterBtnContainer, SubTitle, Title } from "./styles";
