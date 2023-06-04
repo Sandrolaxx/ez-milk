@@ -1,9 +1,9 @@
 import { useNavigation } from "@react-navigation/native";
+import { useState } from "react";
 import Logo from "../../assets/milkIcon.png";
 import Button from "../../components/Button";
-import { Container, ContainerLogin, LogoImg, SubTitle, Title } from "./styles";
 import Input from "../../components/Input";
-import { useState } from "react";
+import { Container, ContainerLogin, LogoImg, Separator, SubTitle, Title } from "./styles";
 
 export default function Login() {
     const navigation = useNavigation();
@@ -26,6 +26,7 @@ export default function Login() {
                 <SubTitle>Realize o login na sua conta</SubTitle>
                 <Input label="E-mail" value={email} handleChangeText={(val: any) => setEmail(val)} />
                 <Input label="Senha" password value={password} handleChangeText={(val: any) => setPassword(val)} />
+                <Separator />
                 <Button handleFunction={() => navigation.navigate("Home")}>
                     Entrar
                 </Button>

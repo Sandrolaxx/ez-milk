@@ -1,21 +1,37 @@
-import { Text } from "react-native";
-import Button from "../../components/Button";
-import { Container } from "./styles";
 import { useNavigation } from "@react-navigation/native";
+import Button from "../../components/Button";
+import { Container, Separator, SeparatorLarge, SubTitle } from "./styles";
 
 export default function Home() {
     const navigation = useNavigation();
-    
+
     return (
         <Container>
-            <Text>Home</Text>
-            <Button handleFunction={() => navigation.navigate("CreateRecord", { isExpense: false })}>
+            <SubTitle>Selecione o tipo de lançamento</SubTitle>
+            <SeparatorLarge />
+            <Button
+                bold
+                btnColor="#DFDFE2"
+                btnTextColor={"#00A441"}
+                handleFunction={() => navigation.navigate("CreateRecord", { isExpense: false })}>
                 Receitas
             </Button>
-            <Button handleFunction={() => navigation.navigate("ExpenseManagement")}>
+            <Separator />
+            <Button
+                bold
+                btnColor="#DFDFE2"
+                btnTextColor={"#B80505"}
+                handleFunction={() => navigation.navigate("ExpenseManagement")}>
                 Despesas
             </Button>
-            <Button handleFunction={() => navigation.navigate("HerdChange")}>
+            <SeparatorLarge />
+            <SubTitle>Alterações</SubTitle>
+            <Separator />
+            <Button
+                bold
+                btnColor="#DFDFE2"
+                btnTextColor={"#292B35"}
+                handleFunction={() => navigation.navigate("HerdChange")}>
                 Alteração Rebanho
             </Button>
         </Container>

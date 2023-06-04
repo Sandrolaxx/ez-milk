@@ -4,16 +4,16 @@ export const Container = styled.SafeAreaView`
   flex: 1;
   justify-content: flex-end;
   align-items: center;
+  padding: 0 4%;
   background: #fcfcfc;
 `;
 
 export const ContainerLogin = styled.View`
-  height: 75%;
+  height: 70%;
   width: 100%;
   justify-content: center;
   align-items: center;
   background: #fcfcfc;
-  padding-top: 20%;
 `;
 
 export const Title = styled.Text`
@@ -29,6 +29,10 @@ export const SubTitle = styled.Text`
 `;
 
 export const LogoImg = styled.Image`
-    width: 96px;
-    height: 96px;
+  width: 96px;
+  height: 96px;
+`;
+
+export const Separator = styled.View`
+    height: 32px;
 `

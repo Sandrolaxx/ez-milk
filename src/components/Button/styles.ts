@@ -4,13 +4,14 @@ export const Container = styled.Pressable`
   justify-content: center;
   align-items: center;
   height: 64px;
-  width: 90%;
-  background: #067fcf;
+  width: 100%;
+  background: ${(props: any) => props.btnColor ? props.btnColor : "#067fcf"};
   border-radius: 6px;
-  margin: 16% 4% 0px 4%;
+  margin: 4% 4%;
 `;
 
 export const ButtonText = styled.Text`
-  color: #f7f7f7;
+  color: ${(props: any) => props.btnTextColor ? props.btnTextColor : "#f7f7f7"};
   font-size: 22px;
+  font-weight: ${(props: any) => props.bold ? 700 : 600};
 `;
