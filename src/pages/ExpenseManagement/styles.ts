@@ -50,6 +50,14 @@ export const ExpenseCardBtn = styled.Pressable`
   margin: 3%;
 `;
 
+export const ExpenseStatus = styled.Image`
+  position: absolute;
+  width: 36px;
+  height: 36px;
+  left: 138px;
+  top: -14px;
+`;
+
 export const ExpenseText = styled.Text`
   font-weight: 700;
   font-size: 18px;

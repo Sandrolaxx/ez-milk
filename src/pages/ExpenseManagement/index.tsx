@@ -1,7 +1,9 @@
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 import SelectDropdown from "react-native-select-dropdown";
+import SuccessCircle from "../../assets/icons/check-circle.png";
 import ChevronDown from "../../assets/icons/chevron-down.png";
+import CloseDown from "../../assets/icons/close-circle.png";
 import CornImg from "../../assets/icons/corn.png";
 import GrassImg from "../../assets/icons/grass.png";
 import HealthImg from "../../assets/icons/heartbeat.png";
@@ -9,7 +11,7 @@ import LaboresImg from "../../assets/icons/laborers.png";
 import MineralImg from "../../assets/icons/salt.png";
 import GoBackBtn from "../../components/GoBackBtn";
 import { getMonths } from "../../utils/utils";
-import { CardBtnBlock, Container, ContainerBtn, DropDownIcon, ExpenseCardBtn, ExpenseImage, ExpenseText, MovimentBlock, MovimentDiscription, MovimentValue, Movimentations, SelectViewContainer, SelectedView, SelectedViewText, Separator, Subtitle } from "./styles";
+import { CardBtnBlock, Container, ContainerBtn, DropDownIcon, ExpenseCardBtn, ExpenseImage, ExpenseStatus, ExpenseText, MovimentBlock, MovimentDiscription, MovimentValue, Movimentations, SelectViewContainer, SelectedView, SelectedViewText, Separator, Subtitle } from "./styles";
 
 export default function ExpenseManagement() {
     const navigation = useNavigation();
@@ -39,6 +41,7 @@ export default function ExpenseManagement() {
                     <Subtitle>Selecione o tipo de lançamento</Subtitle>
                     <CardBtnBlock>
                         <ExpenseCardBtn onPress={() => navigation.navigate("CreateRecord", { isExpense: true })}>
+                            <ExpenseStatus source={SuccessCircle} />
                             <ExpenseImage source={CornImg} />
                             <ExpenseText>
                                 Concentrado
@@ -67,6 +70,7 @@ export default function ExpenseManagement() {
                     </CardBtnBlock>
                     <CardBtnBlock>
                         <ExpenseCardBtn onPress={() => navigation.navigate("CreateRecord", { isExpense: true })}>
+                        <ExpenseStatus source={CloseDown} />
                             <ExpenseImage source={LaboresImg} />
                             <ExpenseText>
                                 Mão de Obra
