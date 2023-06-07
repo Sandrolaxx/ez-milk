@@ -10,14 +10,6 @@ export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    async function verifyConnection() {
-        const baseUrl = "http://192.168.3.75:8080/tipo-registro?pessoaId=1";
-
-        const teste = await fetch(baseUrl);
-
-        console.log(teste);
-    }
-
     return (
         <Container>
             <LogoImg source={Logo} />
