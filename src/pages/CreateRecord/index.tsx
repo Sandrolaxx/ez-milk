@@ -6,8 +6,8 @@ import ChevronDown from "../../assets/icons/chevron-down.png";
 import Button from "../../components/Button";
 import GoBackBtn from "../../components/GoBackBtn";
 import Input from "../../components/Input";
-import { baseUrl } from "../../utils/configs";
-import { CreateExpenseData, ExpenseChildData } from "../../utils/types";
+import { useAppContext } from "../../context/appContext";
+import { Expense, ExpenseChildData } from "../../utils/types";
 import { DropDownIcon } from "../ExpenseManagement/styles";
 import { CalendarView, Container, RegisterBtnContainer, SubTitle, Title } from "./styles";
 
@@ -21,20 +21,11 @@ export default function CreateRecord(navParam: any) {
     const [isShowCalendar, setShowCalendar] = useState(false);
     const [expenseChild, setExpenseChild] = useState<Array<ExpenseChildData>>();
     const [selectedExpenseChild, setSelectedExpenseChild] = useState<string>();
+    const { expensesData, updateData } = useAppContext();
 
     useEffect(() => {
-        if (expense) {
-            fetch(baseUrl.concat("/registro-filho/?tipoRegistro=".concat(expense.id)), {
-                headers: {
-                    "Content-type": "application/json"
-                }
-            })
-                .then(res => {
-                    res.json().then(res => setExpenseChild(res));
-                })
-                .catch(err => console.error(err));
-        }
-    }, [expense]);
+        setExpenseChild([{ id: 1, descricao: "ração" }])
+    }, []);
 
     function handleSelectDate(day: DateData) {
         setDate(day.dateString);
@@ -42,35 +33,18 @@ export default function CreateRecord(navParam: any) {
     }
 
     function handleCreate() {
-        var payload: CreateExpenseData = {
+        const newExpense: Expense = {
+            dataRegistro: date,
             entrada: true,
-            dataRegistro: date == "" ? new Date().toISOString() : date,
-            quantidade: productQuantity,
-            preco: amount,
-            tipoRegistro: {
-                id: 6
-            }
+            preco: Number.parseFloat(amount),
+            quantidade: productQuantity
         }
 
-        if (isExpense) {
-            const selectedChildExpense = expenseChild?.filter(exp => exp.descricao == selectedExpenseChild)[0];
+        expensesData.push(newExpense);
 
-            payload.tipoRegistro = {
-                id: expense.id,
-            }
+        updateData(expensesData);
 
-            payload.tipoRegistroFilho = {
-                id: selectedChildExpense!.id,
-            }
-        }
-
-        fetch(baseUrl.concat("/registro/1"), {
-            headers: {
-                "Content-type": "application/json"
-            }, method: "POST", body: JSON.stringify(payload)
-        })
-            .then(res => navigation.goBack())
-            .catch(err => console.error(err));
+        navigation.goBack();
     }
 
     return (

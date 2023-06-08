@@ -1,3 +1,10 @@
+import { Dispatch, SetStateAction } from "react";
+
+export interface IAppContext {
+    expensesData: Array<Expense>;
+    updateData: Dispatch<SetStateAction<Array<Expense>>>;
+}
+
 export interface BaseBtnProps {
   handleFunction: Function;
 }
@@ -25,7 +32,12 @@ export interface ISvgProps {
   fill?: string;
 }
 
-export type ExpenseData = {
+export type AppContextType = {
+    expensesData: Array<Expense>;
+    updateData: (info: Array<Expense>) => void;
+}
+
+export type ExpenseInfo = {
   descricao: string;
   id: number;
   statusRegistro: string;
@@ -37,11 +49,11 @@ export type ExpenseChildData = {
 };
 
 export type HistoryData = {
-  registros: Array<CreateExpenseData>;
+  registros: Array<Expense>;
   saldoFinal: number;
 };
 
-export type CreateExpenseData = {
+export type Expense = {
   entrada: boolean;
   dataRegistro: string;
   quantidade: string;

@@ -11,7 +11,7 @@ import LaboresImg from "../../assets/icons/laborers.png";
 import MineralImg from "../../assets/icons/salt.png";
 import GoBackBtn from "../../components/GoBackBtn";
 import { baseUrl } from "../../utils/configs";
-import { ExpenseData, HistoryData } from "../../utils/types";
+import { ExpenseInfo, HistoryData } from "../../utils/types";
 import { formatMoneyWithSign, getIntMonth, getMonths } from "../../utils/utils";
 import { CardBtnBlock, Container, ContainerBtn, DropDownIcon, ExpenseCardBtn, ExpenseImage, ExpenseStatus, ExpenseText, MovimentBlock, MovimentDiscription, MovimentValue, Movimentations, SelectViewContainer, SelectedView, SelectedViewText, Separator, Subtitle } from "./styles";
 
@@ -20,7 +20,7 @@ export default function ExpenseManagement() {
     const months = getMonths();
     const [isExpensesView, setExpensesView] = useState(true);
     const [selectedMonth, setSelectedMonth] = useState(6);
-    const [expensesData, setExpensesData] = useState<Array<ExpenseData>>();
+    const [expensesData, setExpensesData] = useState<Array<ExpenseInfo>>();
     const [historyData, setHistoryData] = useState<HistoryData>();
     const isFocused = useIsFocused();
 
