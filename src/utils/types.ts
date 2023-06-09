@@ -5,6 +5,8 @@ export interface IAppContext {
     updateHistoryData: Dispatch<SetStateAction<Array<Expense>>>;
     expensesData: Array<ExpenseInfo>;
     updateData: Dispatch<SetStateAction<Array<ExpenseInfo>>>;
+    rebanhoData: RebanhoType;
+    updateRebanhoData: Dispatch<SetStateAction<RebanhoType>>;
 }
 
 export interface BaseBtnProps {
@@ -39,6 +41,8 @@ export type AppContextType = {
     updateHistoryData: Dispatch<SetStateAction<Array<Expense>>>;
     expensesData: Array<ExpenseInfo>;
     updateData: (info: Array<ExpenseInfo>) => void;
+    rebanhoData: RebanhoType;
+    updateRebanhoData: Dispatch<SetStateAction<RebanhoType>>;
 }
 
 export type ExpenseInfo = {

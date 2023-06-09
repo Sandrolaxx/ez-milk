@@ -76,11 +76,13 @@ export default function CreateRecord(navParam: any) {
 
         historyData.push(newExpense);
 
-        expensesData.forEach(el => {
-            if (el.descricao == expense.descricao && el.statusRegistro == "SEM_REGISTRO") {
-                el.statusRegistro = "REGISTRO_OK"
-            }
-        });
+        if (isExpense) {
+            expensesData.forEach(el => {
+                if (el.descricao == expense.descricao && el.statusRegistro == "SEM_REGISTRO") {
+                    el.statusRegistro = "REGISTRO_OK"
+                }
+            });
+        }
 
         updateData(expensesData);
 
