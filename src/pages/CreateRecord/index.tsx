@@ -7,7 +7,7 @@ import Button from "../../components/Button";
 import GoBackBtn from "../../components/GoBackBtn";
 import Input from "../../components/Input";
 import { useAppContext } from "../../context/appContext";
-import { Expense, ExpenseChildData } from "../../utils/types";
+import { Expense } from "../../utils/types";
 import { DropDownIcon } from "../ExpenseManagement/styles";
 import { CalendarView, Container, RegisterBtnContainer, SubTitle, Title } from "./styles";
 
@@ -19,13 +19,32 @@ export default function CreateRecord(navParam: any) {
     const [amount, setAmount] = useState("");
     const [date, setDate] = useState("");
     const [isShowCalendar, setShowCalendar] = useState(false);
-    const [expenseChild, setExpenseChild] = useState<Array<ExpenseChildData>>();
+    const [expenseChild, setExpenseChild] = useState<Array<string>>();
     const [selectedExpenseChild, setSelectedExpenseChild] = useState<string>();
-    const { expensesData, updateData } = useAppContext();
+    const { historyData, updateHistoryData } = useAppContext();
 
     useEffect(() => {
-        setExpenseChild([{ id: 1, descricao: "ração" }])
+        if (expense) {
+            setExpenseChild(getExpenseChildType(expense.descricao))
+        }
     }, []);
+
+    function getExpenseChildType(expenseName: string) {
+        switch (expenseName) {
+            case "Concentrado":
+                return ["SOJA", "ALGODAO", "MANDIOCA", "SORGO", "RACAO", "TRIGO", "MILHO"];
+            case "Volumoso":
+                return ["BRACHIARIA", "CAPIAÇU", "CUPIM-ELEFANTE", "TIFTON", "SILAGEM", "CAPIM-TANZANIA"];
+            case "Mineral":
+                return ["CALCIO", "FOSFORO", "SAL MINERAL", "SAL COMUM", "SAL PROTEINADO"];
+            case "Medicamentos":
+                return ["ANTIBIOTICOS", "VACINAS", "HOMEOPLASTICOS", "VERMIFUGO", "ANTI-INFLAMATORIO", "ANALGESICO"];
+            case "Mão de Obra":
+                return ["ALUGUEL DE MAQUINAS", "INSUMOS", "COMBUSTIVEL", "LIMPEZA", "VETERINARIO", "CERCAS"];
+            default:
+                break;
+        }
+    }
 
     function handleSelectDate(day: DateData) {
         setDate(day.dateString);
@@ -34,15 +53,20 @@ export default function CreateRecord(navParam: any) {
 
     function handleCreate() {
         const newExpense: Expense = {
-            dataRegistro: date,
+            dataRegistro: (date == undefined || date == "") ? new Date().toUTCString() : date,
             entrada: true,
             preco: Number.parseFloat(amount),
-            quantidade: productQuantity
+            quantidade: productQuantity,
+            tipoRegistro: {
+                id: new Date().getTime(),
+                descricao: (selectedExpenseChild == undefined || selectedExpenseChild == "") ? "Lançamento de Entrada" : selectedExpenseChild,
+                entrada: (selectedExpenseChild == undefined || selectedExpenseChild == "") ? true : false
+            }
         }
 
-        expensesData.push(newExpense);
+        historyData.push(newExpense);
 
-        updateData(expensesData);
+        updateHistoryData(historyData);
 
         navigation.goBack();
     }
@@ -62,7 +86,7 @@ export default function CreateRecord(navParam: any) {
                 <Input type="numeric" label="Valor Total" value={amount} handleChangeText={(val: any) => setAmount(val)} />
                 {isExpense &&
                     <SelectDropdown
-                        data={expenseChild ? expenseChild.map(val => val.descricao) : ["Selecione uma Opção"]}
+                        data={expenseChild ? expenseChild.map(val => val) : ["Selecione uma Opção"]}
                         defaultValue={"Selecione uma Opção"}
                         renderDropdownIcon={() => <DropDownIcon source={ChevronDown} />}
                         buttonStyle={{

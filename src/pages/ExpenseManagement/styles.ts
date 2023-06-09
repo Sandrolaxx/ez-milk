@@ -35,7 +35,9 @@ export const SelectedViewText = styled.Text`
 `;
 
 export const CardBtnBlock = styled.View`
-  flex-direction: row;
+  width: 100%;
+  flex-wrap: wrap;
+  align-items: center;
 `;
 
 export const ExpenseCardBtn = styled.Pressable`

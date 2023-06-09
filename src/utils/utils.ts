@@ -29,9 +29,9 @@ export function getIntMonth(strMonth: string) {
 }
 
 export function formatMoneyWithSign(amount: number) {
-    return amount
-        .toFixed(2)
-        .replace("", "R$ ")
-        .replace(".", ",")
-        .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+  return amount
+    .toFixed(2)
+    .replace('', 'R$ ')
+    .replace('.', ',')
+    .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
 }

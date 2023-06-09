@@ -1,8 +1,10 @@
 import { Dispatch, SetStateAction } from "react";
 
 export interface IAppContext {
-    expensesData: Array<Expense>;
-    updateData: Dispatch<SetStateAction<Array<Expense>>>;
+    historyData: Array<Expense>;
+    updateHistoryData: Dispatch<SetStateAction<Array<Expense>>>;
+    expensesData: Array<ExpenseInfo>;
+    updateData: Dispatch<SetStateAction<Array<ExpenseInfo>>>;
 }
 
 export interface BaseBtnProps {
@@ -33,8 +35,10 @@ export interface ISvgProps {
 }
 
 export type AppContextType = {
-    expensesData: Array<Expense>;
-    updateData: (info: Array<Expense>) => void;
+    historyData: Array<Expense>;
+    updateHistoryData: Dispatch<SetStateAction<Array<Expense>>>;
+    expensesData: Array<ExpenseInfo>;
+    updateData: (info: Array<ExpenseInfo>) => void;
 }
 
 export type ExpenseInfo = {
@@ -61,7 +65,7 @@ export type Expense = {
   tipoRegistro?: {
     id: number;
     descricao: string;
-    entrada: false;
+    entrada: boolean;
   };
   tipoRegistroFilho?: {
     id: number;

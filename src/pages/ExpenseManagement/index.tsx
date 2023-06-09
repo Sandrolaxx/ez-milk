@@ -1,4 +1,4 @@
-import { useIsFocused, useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import SelectDropdown from "react-native-select-dropdown";
 import SuccessCircle from "../../assets/icons/check-circle.png";
@@ -10,8 +10,8 @@ import HealthImg from "../../assets/icons/heartbeat.png";
 import LaboresImg from "../../assets/icons/laborers.png";
 import MineralImg from "../../assets/icons/salt.png";
 import GoBackBtn from "../../components/GoBackBtn";
-import { baseUrl } from "../../utils/configs";
-import { ExpenseInfo, HistoryData } from "../../utils/types";
+import { useAppContext } from "../../context/appContext";
+import { HistoryData } from "../../utils/types";
 import { formatMoneyWithSign, getIntMonth, getMonths } from "../../utils/utils";
 import { CardBtnBlock, Container, ContainerBtn, DropDownIcon, ExpenseCardBtn, ExpenseImage, ExpenseStatus, ExpenseText, MovimentBlock, MovimentDiscription, MovimentValue, Movimentations, SelectViewContainer, SelectedView, SelectedViewText, Separator, Subtitle } from "./styles";
 
@@ -19,43 +19,20 @@ export default function ExpenseManagement() {
     const navigation = useNavigation();
     const months = getMonths();
     const [isExpensesView, setExpensesView] = useState(true);
-    const [selectedMonth, setSelectedMonth] = useState(6);
-    const [expensesData, setExpensesData] = useState<Array<ExpenseInfo>>();
     const [historyData, setHistoryData] = useState<HistoryData>();
-    const isFocused = useIsFocused();
+    const [selectedMonth, setSelectedMonth] = useState(6);
+    const { historyData: history, expensesData } = useAppContext();
 
     useEffect(() => {
-        if (isExpensesView) {
-            fetch(baseUrl.concat("/tipo-registro/?pessoaId=1"), {
-                headers: {
-                    "Content-type": "application/json"
-                }
-            })
-                .then(res => {
-                    res.json().then(res => {
-                        setExpensesData(res)
-                    });
-                })
-                .catch(err => console.error(err));
+        if (history && history.length > 0) {
+            const filteredMonthExpenses = history.filter(item => new Date(item.dataRegistro).getMonth() + 1 == selectedMonth);
 
-        } else {
-            handleGetHistory();
+            setHistoryData({
+                registros: filteredMonthExpenses,
+                saldoFinal: filteredMonthExpenses.map(item => item.preco).reduce((total, item) => total + item)
+            })
         }
-    }, [isFocused, isExpensesView, selectedMonth]);
-
-    function handleGetHistory() {
-        fetch(baseUrl.concat("/registro/1/historico?mes=".concat(selectedMonth.toString())), {
-            headers: {
-                "Content-type": "application/json"
-            }
-        })
-            .then(res => {
-                res.json().then(res => {
-                    setHistoryData(res);
-                });
-            })
-            .catch(err => console.error(err));
-    }
+    }, [selectedMonth]);
 
     function getStatusComponent(strStatus: string) {
         switch (strStatus) {
@@ -65,6 +42,22 @@ export default function ExpenseManagement() {
                 return <ExpenseStatus source={SuccessCircle} />
             case "REGISTRO_ATRASADO":
                 return <ExpenseStatus source={CloseDown} />
+            default:
+                break;
+        }
+    }
+    function getImageComponent(expenseName: string) {
+        switch (expenseName) {
+            case "Concentrado":
+                return CornImg;
+            case "Volumoso":
+                return GrassImg;
+            case "Mineral":
+                return MineralImg;
+            case "Medicamentos":
+                return HealthImg;
+            case "Mão de Obra":
+                return LaboresImg;
             default:
                 break;
         }
@@ -95,45 +88,15 @@ export default function ExpenseManagement() {
                     <Container>
                         <Subtitle>Selecione o tipo de lançamento</Subtitle>
                         <CardBtnBlock>
-                            <ExpenseCardBtn onPress={() => navigation.navigate("CreateRecord", { isExpense: true, expense: expensesData[4] })}>
-                                {getStatusComponent(expensesData[4].statusRegistro)}
-                                <ExpenseImage source={CornImg} />
-                                <ExpenseText>
-                                    {expensesData[4].descricao}
-                                </ExpenseText>
-                            </ExpenseCardBtn>
-                            <ExpenseCardBtn onPress={() => navigation.navigate("CreateRecord", { isExpense: true, expense: expensesData[0] })}>
-                                {getStatusComponent(expensesData[0].statusRegistro)}
-                                <ExpenseImage source={GrassImg} />
-                                <ExpenseText>
-                                    {expensesData[0].descricao}
-                                </ExpenseText>
-                            </ExpenseCardBtn>
-                        </CardBtnBlock>
-                        <CardBtnBlock>
-                            <ExpenseCardBtn onPress={() => navigation.navigate("CreateRecord", { isExpense: true, expense: expensesData[3] })}>
-                                {getStatusComponent(expensesData[3].statusRegistro)}
-                                <ExpenseImage source={MineralImg} />
-                                <ExpenseText>
-                                    {expensesData[3].descricao}
-                                </ExpenseText>
-                            </ExpenseCardBtn>
-                            <ExpenseCardBtn onPress={() => navigation.navigate("CreateRecord", { isExpense: true, expense: expensesData[1] })}>
-                                {getStatusComponent(expensesData[1].statusRegistro)}
-                                <ExpenseImage source={HealthImg} />
-                                <ExpenseText>
-                                    {expensesData[1].descricao}
-                                </ExpenseText>
-                            </ExpenseCardBtn>
-                        </CardBtnBlock>
-                        <CardBtnBlock>
-                            <ExpenseCardBtn onPress={() => navigation.navigate("CreateRecord", { isExpense: true, expense: expensesData[2] })}>
-                                {getStatusComponent(expensesData[2].statusRegistro)}
-                                <ExpenseImage source={LaboresImg} />
-                                <ExpenseText>
-                                    {expensesData[2].descricao}
-                                </ExpenseText>
-                            </ExpenseCardBtn>
+                            {expensesData.map(expense => (
+                                <ExpenseCardBtn key={expense.id} onPress={() => navigation.navigate("CreateRecord", { isExpense: true, expense: expense })}>
+                                    {getStatusComponent(expense.statusRegistro)}
+                                    <ExpenseImage source={getImageComponent(expense.descricao)} />
+                                    <ExpenseText>
+                                        {expense.descricao}
+                                    </ExpenseText>
+                                </ExpenseCardBtn>
+                            ))}
                         </CardBtnBlock>
                     </Container>
                     :
