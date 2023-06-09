@@ -9,22 +9,22 @@ export const defaultExpenses: Array<ExpenseInfo> = [
     statusRegistro: 'SEM_REGISTRO',
   },
   {
-    id: 2,
+    id: 4,
     descricao: 'Volumoso',
     statusRegistro: 'SEM_REGISTRO',
   },
   {
-    id: 3,
+    id: 2,
     descricao: 'Mineral',
     statusRegistro: 'REGISTRO_OK',
   },
   {
-    id: 4,
+    id: 5,
     descricao: 'Medicamentos',
     statusRegistro: 'SEM_REGISTRO',
   },
   {
-    id: 5,
+    id: 3,
     descricao: 'Mão de Obra',
     statusRegistro: 'REGISTRO_ATRASADO',
   },

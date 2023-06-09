@@ -1,4 +1,4 @@
-import { useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import SelectDropdown from "react-native-select-dropdown";
 import SuccessCircle from "../../assets/icons/check-circle.png";
@@ -22,17 +22,23 @@ export default function ExpenseManagement() {
     const [historyData, setHistoryData] = useState<HistoryData>();
     const [selectedMonth, setSelectedMonth] = useState(6);
     const { historyData: history, expensesData } = useAppContext();
+    const isFocudes = useIsFocused();
 
     useEffect(() => {
         if (history && history.length > 0) {
             const filteredMonthExpenses = history.filter(item => new Date(item.dataRegistro).getMonth() + 1 == selectedMonth);
 
-            setHistoryData({
-                registros: filteredMonthExpenses,
-                saldoFinal: filteredMonthExpenses.map(item => item.preco).reduce((total, item) => total + item)
-            })
+            if (filteredMonthExpenses.length > 0) {
+                setHistoryData({
+                    registros: filteredMonthExpenses,
+                    saldoFinal: filteredMonthExpenses.map(item => item.preco).reduce((total, item) => total + item)
+                });
+
+                return;
+            }
         }
-    }, [selectedMonth]);
+        setHistoryData({ registros: [], saldoFinal: 0.0 });
+    }, [selectedMonth, isFocudes]);
 
     function getStatusComponent(strStatus: string) {
         switch (strStatus) {

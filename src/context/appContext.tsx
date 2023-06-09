@@ -9,7 +9,7 @@ export default function DataProvider(props: any) {
     const [expensesData, setExpensesData] = useState<Array<ExpenseInfo>>([]);
 
     if (expensesData.length == 0) {
-        setExpensesData(defaultExpenses);
+        setExpensesData(defaultExpenses.sort((e1, e2) => e1.id - e2.id));
     }
 
     return (

@@ -12,7 +12,7 @@ export const RegisterBtnContainer = styled.View`
   width: 100%;
   align-items: center;
   justify-content: flex-end;
-  padding-bottom: 24px;
+  padding-bottom: 6px;
 `;
 
 export const Title = styled.Text`

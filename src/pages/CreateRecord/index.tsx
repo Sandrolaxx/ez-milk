@@ -21,7 +21,7 @@ export default function CreateRecord(navParam: any) {
     const [isShowCalendar, setShowCalendar] = useState(false);
     const [expenseChild, setExpenseChild] = useState<Array<string>>();
     const [selectedExpenseChild, setSelectedExpenseChild] = useState<string>();
-    const { historyData, updateHistoryData } = useAppContext();
+    const { historyData, updateHistoryData, expensesData, updateData } = useAppContext();
 
     useEffect(() => {
         if (expense) {
@@ -52,19 +52,37 @@ export default function CreateRecord(navParam: any) {
     }
 
     function handleCreate() {
+        var expenseDescription = "Lançamento de Entrada";
+
+        if (isExpense) {
+            expenseDescription = selectedExpenseChild == "" ?
+                getExpenseChildType(expense.descricao)![0]
+                : selectedExpenseChild!;
+
+            expenseDescription = expense.descricao.concat(" - ").concat(expenseDescription);
+        }
+
         const newExpense: Expense = {
             dataRegistro: (date == undefined || date == "") ? new Date().toUTCString() : date,
-            entrada: true,
+            entrada: isExpense ? false : true,
             preco: Number.parseFloat(amount),
             quantidade: productQuantity,
             tipoRegistro: {
                 id: new Date().getTime(),
-                descricao: (selectedExpenseChild == undefined || selectedExpenseChild == "") ? "Lançamento de Entrada" : selectedExpenseChild,
-                entrada: (selectedExpenseChild == undefined || selectedExpenseChild == "") ? true : false
+                descricao: expenseDescription,
+                entrada: isExpense ? false : true
             }
         }
 
         historyData.push(newExpense);
+
+        expensesData.forEach(el => {
+            if (el.descricao == expense.descricao && el.statusRegistro == "SEM_REGISTRO") {
+                el.statusRegistro = "REGISTRO_OK"
+            }
+        });
+
+        updateData(expensesData);
 
         updateHistoryData(historyData);
 
@@ -91,7 +109,7 @@ export default function CreateRecord(navParam: any) {
                         renderDropdownIcon={() => <DropDownIcon source={ChevronDown} />}
                         buttonStyle={{
                             width: "100%", borderRadius: 6, borderColor: "#b9b9c5",
-                            borderWidth: 1, marginTop: 18
+                            borderWidth: 1, marginTop: 26, marginBottom: -8
                         }}
                         onSelect={(selectedItem, index) => setSelectedExpenseChild(selectedItem)}
                     />
